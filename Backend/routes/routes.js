@@ -39,9 +39,17 @@ router.get('/questions/:id', async(req, res) => {
 // create one quiz question
 router.post('/questions', async (req, res) => {
     try{
-        const { lists } = req.body
+
+        const question = await Question.create()
 
         console.log(req.body)
+
+        for (var element in req.body) {
+            // console.log(element + " " + req.body[element])
+            var index = element.indexOf(":")
+            var list_id = element.substring(0, index)
+            var task_id = element.substring(index + 1)
+        }
 
         // const question = await Question.create({lists})
 
@@ -57,7 +65,9 @@ router.put('/questions/:id/:list/:task', async (req, res) => {
 
         console.log(req.params)
 
-        console.log(req.body)
+        console.log(req.body[0])
+
+
 
         const _id = req.params.id 
 
