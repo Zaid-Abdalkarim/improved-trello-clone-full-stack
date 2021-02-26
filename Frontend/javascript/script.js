@@ -1,15 +1,19 @@
 item_counter = 0 // make this so it first counts all of the draggable items
 list_counter = 0
-
-const Lists = document.getElementsByClassName("example-dropzone");
-
-for(i = 0; i < Lists.length; i++)
+function counter(list_index)
 {
-    Lists[i].id = list_counter;
-    list_counter = list_counter + 1;
-    item_counter = item_counter + (Lists[i].children.length - 1);
+  const Lists = document.getElementsByClassName("example-dropzone");
+  item_counter = 0
+  item_counter = item_counter + (Lists[list_index].children.length - 2);
+
+  // for(i = 0; i < Lists.length; i++)
+  // {
+  //     Lists[i].id = list_counter;
+  //     list_counter = list_counter + 1;
+  //     item_counter = item_counter + (Lists[i].children.length - 2);
+  // }
+  // list_counter = list_counter + 1; // list counter will always be off by one
 }
-list_counter = list_counter + 1; // list counter will always be off by one
 
 function onDragStart(event) {
     event
@@ -36,6 +40,10 @@ function onDrop(event) {
       .clearData();
 }
 function addListItem(id) {
+    list_id = id.slice(6, id.length)
+    console.log(parseInt(list_id))
+    
+    counter(parseInt(list_id))
     const newDiv = document.createElement("div"); // create the new element 
 
     newDiv.classList.add("example-draggable")
@@ -45,8 +53,10 @@ function addListItem(id) {
     newDiv.id = id_string
     
     const input = document.createElement('input')
+    
+    
+    input.name = 'ListName' + parseInt(list_id) + "task" + item_counter;
     newDiv.appendChild(input)
-
     item_counter = item_counter + 1;
     Button = document.getElementById(id);
     Button.parentNode.insertBefore(newDiv, Button.nextSibling)

@@ -6,8 +6,12 @@ const routes = require('../routes/routes')
 const mongoose = require('mongoose')
 const session = require('express-session')
 
+const bodyparser = require('body-parser')
+
+
 var passport = require('passport');
 var Auth0Strat = require('passport-auth0')
+
 
 var strat = new Auth0Strat({
     domain: process.env.AUTH0_DOMAIN,
@@ -26,6 +30,7 @@ var sess = {
     resave: false,
     saveUninitialized: true
 }
+app.use(bodyparser.urlencoded({extended: false}))
 
 app.use(cors())
 app.use(express.json())

@@ -41,34 +41,48 @@ router.post('/questions', async (req, res) => {
     try{
         const { lists } = req.body
 
-        const question = await Question.create({lists})
+        console.log(req.body)
 
-        return res.status(200).json(question)
+        // const question = await Question.create({lists})
+
+        // return res.status(200).json(question)
     } catch(error){
         return res.status(500).json({"error": error})
     }
 })
 
 // update one quiz question
-router.put('/questions/:id', async (req, res) => {
+router.put('/questions/:id/:list/:task', async (req, res) => {
     try {
+
+        console.log(req.params)
+
+        console.log(req.body)
+
         const _id = req.params.id 
+
+        const _list = req.params.list
+
         const { description, alternatives } = req.body
 
         let question = await Question.findOne({_id})
 
-        if(!question){
-            question = await Question.create({
-                description,
-                alternatives
-            })    
-            return res.status(201).json(question)
-        }else{
-            question.description = description
-            question.alternatives = alternatives
-            await question.save()
-            return res.status(200).json(question)
-        }
+        console.log(question)
+        list = question.lists
+
+        // if(!question){
+        //     question = await Question.create({
+        //         description,
+        //         alternatives
+        //     })    
+        //     return res.status(201).json(question)
+        // }else{
+        //     question.description = description
+        //     question.alternatives = alternatives
+        //     await question.save()
+        //     return res.status(200).json(question)
+        // }
+        return res.status(200).json({"testing": list})
     } catch (error) {
         return res.status(500).json({"error":error})
     }
