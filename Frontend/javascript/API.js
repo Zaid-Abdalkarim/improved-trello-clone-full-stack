@@ -11,6 +11,8 @@ async function getList()
 function getHTML(json) {
     const master = document.createElement('div')
     master.classList.add('example-parent')
+    master.classList.add('card')
+    master.classList.add('center')
     master.id = "main"
 
     for (var i in json.lists) {
@@ -35,8 +37,10 @@ function getHTML(json) {
         console.log(json.lists[i])
         for(j in json.lists[i].tasks)
         {
-            const child = document.createElement('form');
+            const child = document.createElement('div');
             child.classList.add("example-draggable");
+            child.classList.add("task-card");
+            child.classList.add("side-side");
             child.id = json.lists[i].tasks[j].task_id;
             // child.textContent = json.lists[i].tasks[j].text;
             child.draggable = true;
@@ -44,18 +48,17 @@ function getHTML(json) {
             const input = document.createElement('input')
             input.name =  "task";
             input.value = json.lists[i].tasks[j].text
+            input.setAttribute("disabled", '')
+
+            const btn = document.createElement("button");
+            btn.textContent = "Edit"
+            btn.setAttribute("onclick", 'popup();')
             child.appendChild(input)
+            child.appendChild(btn)
             newDiv.appendChild(child);
         }
         master.appendChild(newDiv);
     }
-    const btn = document.createElement("button");
-    btn.textContent = "Save"
-    btn.type = "submit"
-    btn.onclick = serialize()
-    btn.formAction = "http://localhost:8080/questions"
-    btn.formMethod = "POST"
-    master.appendChild(btn)
 
     console.log(master);
     body = document.body.appendChild(master)

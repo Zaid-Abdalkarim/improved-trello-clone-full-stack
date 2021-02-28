@@ -1,5 +1,5 @@
 .example-parent {
-  border: 2px solid #dfa612;
+  border: 2px solid white;
   color: black;
   display: flex;
   font-family: sans-serif;
@@ -13,7 +13,7 @@
 }
 
 .example-draggable {
-  background-color: #4aae9b;
+  background-color: #ffffff;
   font-weight: normal;
   margin-bottom: 10px;
   margin-top: 10px;
@@ -21,8 +21,133 @@
 }
 
 .example-dropzone {
-  background-color: #6db65b;
+  background-color: gray;
   flex-basis: 100%;
   flex-grow: 1;
   padding: 10px;
+  border-radius: 25px;
+  margin: 2vw;
 }
+
+button {
+  margin-top: 20px;
+  border: none;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+  text-transform: uppercase;
+  background-color: #1294df;
+  color: white;
+  border-radius: 25px;
+}
+
+button:hover {
+  background: #0d67bb;
+  color: white;
+  transition: transform 0.2s;
+  border-radius: 25px;
+  transform: scale(1.1);
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+  border-radius: 25px;
+  background: white;
+  padding: 10px;
+  width: 50%;
+}
+.center {
+  padding-top: "50px";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.task-card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+  border-radius: 25px;
+  background: darkgray;
+  padding: 10px;
+  width: 15vw;
+}
+input[type="text"],
+select,
+textarea {
+  width: 95%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+body,
+input {
+  font: 400 1.2rem Roboto, sans-serif;
+}
+
+.side-side {
+  padding-left: 10%;
+  margin: 10% 0%;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+/* popout */
+
+.popup .overlay {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+  display: none;
+}
+
+.popup .content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: #fff;
+  width: 500px;
+  height: 250px;
+  z-index: 2;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  border-radius: 5px;
+}
+
+.popup .close-btn {
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 30px;
+  height: 30px;
+  background: #222;
+  color: #fff;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 50%;
+}
+
+.popup.active .overlay {
+  display: block;
+}
+
+.popup.active .content {
+  transition: all 300ms ease-in-out;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* popout input styling */
