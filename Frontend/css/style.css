@@ -89,6 +89,11 @@ input {
   font: 400 1.2rem Roboto, sans-serif;
 }
 
+input:disabled {
+  background: darkgray;
+  border: none;
+}
+
 .side-side {
   padding-left: 10%;
   margin: 10% 0%;
@@ -151,3 +156,14 @@ input {
 }
 
 /* popout input styling */
+
+.edit-div-button {
+  display: inline-block;
+  color: #fff;
+  background: #222;
+  cursor: pointer;
+  vertical-align: middle;
+  max-width: 100px;
+  padding: 5px;
+  text-align: center;
+}

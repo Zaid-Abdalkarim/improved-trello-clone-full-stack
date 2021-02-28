@@ -4,7 +4,8 @@ function counter(list_index)
 {
   const Lists = document.getElementsByClassName("example-dropzone");
   item_counter = 0
-  item_counter = item_counter + (Lists[list_index].children.length - 2);
+  if(Lists.children != undefined)
+    item_counter = item_counter + (Lists[list_index].children.length - 2);
 
   // for(i = 0; i < Lists.length; i++)
   // {
@@ -43,13 +44,23 @@ function addListItem(id) {
     const newDiv = document.createElement("div"); // create the new element 
 
     newDiv.classList.add("example-draggable")
+    newDiv.classList.add("task-card");
+    newDiv.classList.add("side-side");
     newDiv.draggable = true
     newDiv.setAttribute("onDragStart","onDragStart(event)");
     id_string = ('draggable-' + item_counter)
     newDiv.id = id_string
     
     const input = document.createElement('input')
+    input.name =  "text";
+    input.value = ''
+    input.setAttribute("disabled", '')
     
+    const btn = document.createElement("button");
+    btn.id = json.task[j]._id;
+    btn.textContent = "Edit"
+    btn.setAttribute("onclick", 'popup(this.id);')
+    newDiv.appendChild(btn)
     
     input.name = "lists" + ".tasks" + item_counter;
     newDiv.appendChild(input)
@@ -58,5 +69,16 @@ function addListItem(id) {
     Button.parentNode.insertBefore(newDiv, Button.nextSibling)
 }
 
+
+function getListId()
+{
+  list_id = document.getElementsByClassName("example-dropzone")[0].id
+  return list_id
+}
+
+function printData(data)
+{
+  console.log(data)
+}
 
 //<button onclick="addListItem(this.id)" id='To-Do-Button2'>Add Child</button>
