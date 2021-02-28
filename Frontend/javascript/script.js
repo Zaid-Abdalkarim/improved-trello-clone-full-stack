@@ -55,7 +55,7 @@ function addListItem(id) {
     const input = document.createElement('input')
     
     
-    input.name = parseInt(list_id) + ":" + item_counter;
+    input.name = "lists" + ".tasks" + item_counter;
     newDiv.appendChild(input)
     item_counter = item_counter + 1;
     Button = document.getElementById(id);

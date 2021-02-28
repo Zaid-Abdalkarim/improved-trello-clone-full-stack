@@ -9,7 +9,7 @@ async function getList()
 }
 
 function getHTML(json) {
-    const master = document.createElement('form')
+    const master = document.createElement('div')
     master.classList.add('example-parent')
     master.id = "main"
 
@@ -20,7 +20,7 @@ function getHTML(json) {
         newDiv.setAttribute("ondrop", "onDrop(event);")
 
         const List_name = document.createElement('input')
-        List_name.name = 'lists' + i + '.'
+        List_name.name = "list_name."
         List_name.value = json.lists[i].list_name
 
         newDiv.appendChild(List_name)
@@ -35,14 +35,14 @@ function getHTML(json) {
         console.log(json.lists[i])
         for(j in json.lists[i].tasks)
         {
-            const child = document.createElement('div');
+            const child = document.createElement('form');
             child.classList.add("example-draggable");
             child.id = json.lists[i].tasks[j].task_id;
             // child.textContent = json.lists[i].tasks[j].text;
             child.draggable = true;
             child.setAttribute("ondragstart","onDragStart(event)");
             const input = document.createElement('input')
-            input.name =  'lists' + i + '.' + "tasks" + j
+            input.name =  "task";
             input.value = json.lists[i].tasks[j].text
             child.appendChild(input)
             newDiv.appendChild(child);
@@ -80,22 +80,25 @@ async function serialize() {
         var fullName = el.getAttribute("name");
         if (!fullName) continue;
         var fullNameParts = fullName.split('.');
+        console.log(fullNameParts)
         var prefix = '';
         var stack = data;
+        var extra = ''
         for (var k = 0; k < fullNameParts.length - 1; k++) {
-        prefix = fullNameParts[k];
-        if (!stack[prefix]) {
-            stack[prefix] = {};
-        }
-        stack = stack[prefix];
+            prefix = fullNameParts[k];            
+
+            if (!stack[prefix]) {
+                stack[prefix] = {};
+            }
+            stack = stack[prefix];
         }
         prefix = fullNameParts[fullNameParts.length - 1];
         if (stack[prefix]) {
 
-        var newVal = stack[prefix] + ',' + val;
-        stack[prefix] += newVal;
+            var newVal = stack[prefix] + ',' + val;
+            stack[prefix] += newVal;
         } else {
-        stack[prefix] = val;
+            stack[prefix] = val;
         }
     }
     sendData(data)
@@ -103,6 +106,7 @@ async function serialize() {
 
 async function sendData(data)
 {
+    // console.log(await JSON.stringify(document.getElementById('main').formToJson()))
     console.log(data)
-    await fetch("http://localhost:8080/questions", {method: 'POST', body: JSON.stringify(data),   headers: {"Content-type": "application/json; charset=UTF-8"}})
+    await fetch("http://localhost:8080/list", {method: 'POST', body: JSON.stringify(data),   headers: {"Content-type": "application/json; charset=UTF-8"}})
 }

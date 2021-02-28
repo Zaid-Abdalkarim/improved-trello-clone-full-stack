@@ -9,7 +9,7 @@ var secured = require('../lib/middleware/secured');
 // route for deleting question
 
 
-//get all questions
+//working get all lists
 router.get('/questions', async(req, res) => {
     try {
         const questions = await Question.find()
@@ -20,7 +20,7 @@ router.get('/questions', async(req, res) => {
     }
 })
 
-// get one quiz question
+// working get one list
 router.get('/questions/:id', async(req, res) => {
     try {
         const _id = req.params.id 
@@ -36,69 +36,55 @@ router.get('/questions/:id', async(req, res) => {
     }
 })
 
-// create one quiz question
+// working create one list
 router.post('/questions', async (req, res) => {
     try{
+        const List = await Question.create({
+            list_name : req.body.list_name
+        })
 
-        const question = await Question.create()
-
-        console.log(req.body)
-
-        for (var element in req.body) {
-            // console.log(element + " " + req.body[element])
-            var index = element.indexOf(":")
-            var list_id = element.substring(0, index)
-            var task_id = element.substring(index + 1)
-        }
-
-        // const question = await Question.create({lists})
-
-        // return res.status(200).json(question)
+        await List.save()
+        return res.status(200).json(List)
     } catch(error){
         return res.status(500).json({"error": error})
     }
 })
 
-// update one quiz question
-router.put('/questions/:id/:list/:task', async (req, res) => {
+//working get one task
+router.get('/questions/:list/:task', async (req, res) => {
     try {
-
-        console.log(req.params)
-
-        console.log(req.body[0])
-
-
-
-        const _id = req.params.id 
-
-        const _list = req.params.list
-
-        const { description, alternatives } = req.body
-
-        let question = await Question.findOne({_id})
-
-        console.log(question)
-        list = question.lists
-
-        // if(!question){
-        //     question = await Question.create({
-        //         description,
-        //         alternatives
-        //     })    
-        //     return res.status(201).json(question)
-        // }else{
-        //     question.description = description
-        //     question.alternatives = alternatives
-        //     await question.save()
-        //     return res.status(200).json(question)
-        // }
-        return res.status(200).json({"testing": list})
+        const _list = req.params.list 
+        const _task = req.params.task
+        console.log(_task)
+        const question = await Question.findOne({_id: _list})
+        for (let index = 0; index < question.task.length; index++) {
+            if(req.params.task = question.task[index]._id)
+                return res.status(200).json(question.task[index])
+        }
+        return res.status(404).json({})
     } catch (error) {
         return res.status(500).json({"error":error})
     }
 })
 
-// delete one quiz question
+
+// working put new task
+router.post('/questions/:list', async (req, res) => {
+    try {
+        console.log(await Question.findOne({_id: req.params.list}))
+        const question = await Question.findOneAndUpdate({"_id": req.params.list}, {"$push": {task:{"text": req.body.text}}}, {new:true})
+
+        if (!question)
+            return res.status(404).json({})
+        else
+            return res.status(200).json(question)
+            
+    } catch (error) {
+        return res.status(500).json({"error":error})
+    }
+})
+
+//working delete one list question
 router.delete('/questions/:id', async(req, res) => {
     try {
         const _id = req.params.id 
@@ -115,23 +101,43 @@ router.delete('/questions/:id', async(req, res) => {
     }
 })
 
-router.get('/user', secured(), function(req, res, next) {
-    const {_raw, _json, ...userProfile} = req.user;
-    return res.status(200).json(userProfile);
+//working delete one task
+router.delete('/questions/:list/:task', async(req, res) => {
+    try {
+        const question = await Question.findByIdAndUpdate(req.params.list, {$pull: {"task": {_id: req.params.task}}}, {safe: true, upsert: true})
+
+        console.log(question)
+
+        if(question.deletedCount === 0){
+            return res.status(404).json()
+        }else{
+            return res.status(204).json()
+        }
+    } catch (error) {
+        return res.status(500).json({"error":error})
+    }
 })
 
-
-router.get('/callback', function (req, res, next) {
-    passport.authenticate('auth0', function (err, user, info) {
-      if (err) { return next(err); }
-      if (!user) { return res.redirect('/login'); }
-      req.logIn(user, function (err) {
-        if (err) { return next(err); }
-        const returnTo = req.session.returnTo;
-        delete req.session.returnTo;
-        res.redirect(returnTo || '/user');
-      });
-    })(req, res, next);
-  });
-
 module.exports = router
+
+
+//this is a duplicate idk? 
+// router.put('/questions/:list/:task', async (req, res) => {
+//     try {
+//         const _task = req.params.task
+//         const question = await Question.findOneAndUpdate({"task._id": _task}, {$set: {task:{"text": req.body.text}}}, {new:true}, (err, doc) => {
+//             if (err) {
+//                 console.log("something went wrong")
+//             }
+//             console.log(doc);
+//             return res.status(200).json(doc)
+//         })
+
+//         console.log(question.task[0])
+
+//         return res.status(404).json({})
+        
+//     } catch (error) {
+//         return res.status(500).json({"error":error})
+//     }
+// })
