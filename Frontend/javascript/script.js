@@ -34,24 +34,29 @@ function addListItem(id) {
     const newDiv = document.createElement("div"); // create the new element 
 
     newDiv.classList.add("example-draggable")
-    newDiv.classList.add("task-card");
-    newDiv.classList.add("side-side");
-    newDiv.draggable = true
+    newDiv.classList.add("task-div0");
+
+    newDiv.draggable = false
     newDiv.setAttribute("onDragStart","onDragStart(event)");
     id_string = ('draggable-' + item_counter)
     newDiv.id = id_string
     
-    const input = document.createElement('input')
+    const input = document.createElement('label')
     input.name =  "text";
     input.value = 'new task'
     input.setAttribute("disabled", '')
+    input.classList.add('center')
+    input.classList.add("task-edit");
     
     const btn = document.createElement("button");
     const item_count = counter()
+    btn.classList.add('fa')
+    btn.classList.add('fa-edit')
+    btn.classList.add('center')
     btn.id = 'new-task' + item_count;
-    btn.textContent = "Edit"
+    btn.textContent = "   Edit"
     btn.setAttribute("onclick", 'popup(this.id);')
-    
+
     input.name = "lists" + ".tasks" + item_counter;
     newDiv.appendChild(input)
     newDiv.appendChild(btn)

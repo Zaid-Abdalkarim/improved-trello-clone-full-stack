@@ -8,13 +8,14 @@ function popup(id)
         const button = document.getElementById(id)
         console.log(button)
         const input = button.previousElementSibling
+        console.log(input)
 
         currentId = button.id
 
-        console.log('input.value =' + input.value)
+        console.log('input.value =' + input.textContent)
 
 
-        edit_input.placeholder = input.value
+        edit_input.placeholder = input.textContent
         var edit_button = edit_input.parentElement
         edit_button = edit_button.parentElement.lastElementChild
         edit_button.id = id;

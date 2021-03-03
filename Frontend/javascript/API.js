@@ -25,41 +25,51 @@ function getHTML(json) {
     newDiv.setAttribute("ondrop", "onDrop(event);")
     newDiv.id = json._id;
 
-    const List_name = document.createElement('input')
+    const List_name = document.createElement('H1')
     List_name.name = "list_name."
-    List_name.value = json.list_name
-    List_name.setAttribute("disabled", '')
+    List_name.textContent = json.list_name
 
     newDiv.appendChild(List_name)
 
     const addTaskForm = document.createElement('form')
+
     const btn = document.createElement("button");
     btn.setAttribute("onclick", "addListItem(this.id)");
     btn.type = "submit"
     btn.id = "button1";
+    btn.classList.add('fa-plus')
+    btn.classList.add('fa')
+
     btn.textContent = "Add Task"
     addTaskForm.appendChild(btn)
     newDiv.appendChild(addTaskForm)
     console.log(json)
+    var i = 0
+    
     for(j in json.task)
     {
+        i = i + 1;
         const child = document.createElement('div');
-        child.classList.add("example-draggable");
-        child.classList.add("task-card");
-        child.classList.add("side-side");
-        child.classList.add("center");
+        // child.classList.add("example-draggable");
         // child.textContent = json.lists[i].tasks[j].text;
-        child.draggable = true;
+        child.classList.add('task-div'.concat((i % 2).toString()))
+        child.draggable = false;
         child.setAttribute("ondragstart","onDragStart(event)");
-        const input = document.createElement('input')
-        input.name =  "text";
-        input.value = json.task[j].text
-        input.setAttribute("disabled", '')
+        const input = document.createElement('label')
+        input.textContent = json.task[j].text
+        input.classList.add('center')
+        input.classList.add("task-edit");
         
+
         const btn = document.createElement("button");
+        btn.classList.add('fa')
+        btn.classList.add('fa-edit')
+        btn.classList.add('center')
         btn.id = json.task[j]._id;
-        btn.textContent = "Edit"
+        btn.textContent = "  Edit"
         btn.setAttribute("onclick", 'popup(this.id);')
+
+
         child.appendChild(input)
         child.appendChild(btn)
         newDiv.appendChild(child);
