@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Question = require('../schemas/question-schema')
+const List = require('../schemas/question-schema')
 var secured = require('../lib/middleware/secured');
 // const indexRouter = require('../frontend/index.jsx')
 // Route getting questions, route getting one question, route getting list of questions of a certain type
@@ -11,26 +11,26 @@ var secured = require('../lib/middleware/secured');
 
 
 //working get all lists
-router.get('/questions', async(req, res) => {
+router.get('/lists', async(req, res) => {
     try {
-        const questions = await Question.find()
-        res.send(questions)
-        return res.status(200).json(questions)
+        const lists = await List.find()
+        res.send(lists)
+        return res.status(200).json(lists)
     } catch (error) {
         return res.status(500).json({"error": error})
     }
 })
 
 // working get one list
-router.get('/questions/:id', async(req, res) => {
+router.get('/lists/:id', async(req, res) => {
     try {
         const _id = req.params.id 
 
-        const question = await Question.findOne({_id})        
-        if(!question){
+        const list = await List.findOne({_id})        
+        if(!list){
             return res.status(404).json({})
         }else{
-            return res.status(200).json(question)
+            return res.status(200).json(list)
         }
     } catch (error) {
         return res.status(500).json({"error":error})
@@ -38,9 +38,9 @@ router.get('/questions/:id', async(req, res) => {
 })
 
 // working create one list
-router.post('/questions', async (req, res) => {
+router.post('/lists', async (req, res) => {
     try{
-        const List = await Question.create({
+        const List = await List.create({
             list_name : req.body.list_name
         })
 
@@ -52,15 +52,15 @@ router.post('/questions', async (req, res) => {
 })
 
 //working get one task
-router.get('/questions/:list/:task', async (req, res) => {
+router.get('/lists/:list/:task', async (req, res) => {
     try {
         const _list = req.params.list 
         const _task = req.params.task
         console.log(_task)
-        const question = await Question.findOne({_id: _list})
-        for (let index = 0; index < question.task.length; index++) {
-            if(req.params.task = question.task[index]._id)
-                return res.status(200).json(question.task[index])
+        const list = await List.findOne({_id: _list})
+        for (let index = 0; index < list.task.length; index++) {
+            if(req.params.task = list.task[index]._id)
+                return res.status(200).json(list.task[index])
         }
         return res.status(404).json({})
     } catch (error) {
@@ -68,16 +68,35 @@ router.get('/questions/:list/:task', async (req, res) => {
     }
 })
 
-
 // working put new task
-router.post('/questions/:list', async (req, res) => {
+router.post('/lists/:list', async (req, res) => {
     try {
-        console.log(await Question.findOne({_id: req.params.list}))
-        const question = await Question.findOneAndUpdate({"_id": req.params.list}, {"$push": {task:{"text": req.body.text}}}, {new:true})
+        console.log(req.body)
+        console.log(await List.findOne({_id: req.params.list}))
+        const question = await List.findOneAndUpdate({"_id": req.params.list}, {"$push": {task:{"text": req.body.text}}}, {new:true})
 
         if (!question)
             return res.status(404).json({})
         else
+            console.log(question)
+            return res.status(200).json(question)
+            
+    } catch (error) {
+        return res.status(500).json({"error":error})
+    }
+})
+
+router.put('/lists/:list/:task', async (req, res) => {
+    try {
+        console.log(req.body)
+        console.log(await List.findOne({_id: req.params.list}))
+        const question = await List.updateOne({"_id": req.params.list, "task._id": req.params.task}, {"$set": {"task.$.text": req.body.text}}, {new:true})
+
+        if (!question)
+            return res.status(404).json({})
+        else
+            console.log(question)
+            console.log(req.body)
             return res.status(200).json(question)
             
     } catch (error) {
@@ -86,11 +105,11 @@ router.post('/questions/:list', async (req, res) => {
 })
 
 //working delete one list question
-router.delete('/questions/:id', async(req, res) => {
+router.delete('/lists/:id', async(req, res) => {
     try {
         const _id = req.params.id 
 
-        const question = await Question.deleteOne({_id})
+        const question = await List.deleteOne({_id})
 
         if(question.deletedCount === 0){
             return res.status(404).json()
@@ -103,13 +122,13 @@ router.delete('/questions/:id', async(req, res) => {
 })
 
 //working delete one task
-router.delete('/questions/:list/:task', async(req, res) => {
+router.delete('/lists/:list/:task', async(req, res) => {
     try {
-        const question = await Question.findByIdAndUpdate(req.params.list, {$pull: {"task": {_id: req.params.task}}}, {safe: true, upsert: true})
+        const list = await List.findByIdAndUpdate(req.params.list, {$pull: {"task": {_id: req.params.task}}}, {safe: true, upsert: true})
 
-        console.log(question)
+        console.log(list)
 
-        if(question.deletedCount === 0){
+        if(list.deletedCount === 0){
             return res.status(404).json()
         }else{
             return res.status(204).json()

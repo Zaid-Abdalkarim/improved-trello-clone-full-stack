@@ -1,10 +1,14 @@
 getList()
 
+function GetListId()
+{
+    return "603bf8ec5c972b4c3c994206"
+}
+
 async function getList()
 {
-    const response  = await fetch('http://localhost:8080/questions/603bf8ec5c972b4c3c994206')
+    const response  = await fetch('http://localhost:8080/lists/'.concat(GetListId()))
     const data = await response.json();
-    console.log(data.lists)
     return getHTML(data)
 }
 
@@ -24,23 +28,26 @@ function getHTML(json) {
     const List_name = document.createElement('input')
     List_name.name = "list_name."
     List_name.value = json.list_name
+    List_name.setAttribute("disabled", '')
 
     newDiv.appendChild(List_name)
 
+    const addTaskForm = document.createElement('form')
     const btn = document.createElement("button");
     btn.setAttribute("onclick", "addListItem(this.id)");
-    btn.type = "button"
+    btn.type = "submit"
     btn.id = "button1";
     btn.textContent = "Add Task"
-    newDiv.appendChild(btn)
-
+    addTaskForm.appendChild(btn)
+    newDiv.appendChild(addTaskForm)
     console.log(json)
-    for(j in json.tasks)
+    for(j in json.task)
     {
         const child = document.createElement('div');
         child.classList.add("example-draggable");
         child.classList.add("task-card");
         child.classList.add("side-side");
+        child.classList.add("center");
         // child.textContent = json.lists[i].tasks[j].text;
         child.draggable = true;
         child.setAttribute("ondragstart","onDragStart(event)");
@@ -61,17 +68,11 @@ function getHTML(json) {
 
     console.log(master);
     body = document.body.appendChild(master)
-
-    const Save = document.createElement("button");
-    Save.textContent = 'save'
-    Save.setAttribute("onclick", "SerializeTask();")
-    document.body.appendChild(Save)
-
 }
 
 data = {}
 
-async function SerializeTask() {
+async function SerializeTask(id) {
     console.log('data');
 
     var form = document.querySelector('form');
@@ -84,7 +85,7 @@ async function SerializeTask() {
 
 
     printData(newData)
-    sendData(newData)
+    put(id, newData)
 
     // var elements = document.querySelectorAll('form');
     // var data = {};
@@ -120,9 +121,9 @@ async function SerializeTask() {
     // sendData(data)
 }
 
-async function sendData(data)
-{
-    // console.log(await JSON.stringify(document.getElementById('main').formToJson()))
-    console.log(data)
-    await fetch("http://localhost:8080/list", {method: 'POST', body: JSON.stringify(data),   headers: {"Content-type": "application/json; charset=UTF-8"}})
-}
+// async function sendData(data)
+// {
+//     // console.log(await JSON.stringify(document.getElementById('main').formToJson()))
+//     console.log(data)
+//     await fetch("http://localhost:8080/list", {method: 'POST', body: JSON.stringify(data),   headers: {"Content-type": "application/json; charset=UTF-8"}})
+// }

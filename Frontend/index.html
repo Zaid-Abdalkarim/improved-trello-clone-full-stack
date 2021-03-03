@@ -12,13 +12,14 @@
           <div class="close-btn" onclick="popup()">&times;</div>
           <fieldset>
             <legend>Edit</legend>
-            <form action="">
+            <form id = "popup-form">
                 <div class="edit">
                   <input name="text" type='text' id='form-edit' placeholder=" ">
                 </div>
                 <br>
                 <br>
-                <div class = "edit-div-button" onclick="SerializeTask(); popup();">save</div>
+                <br>
+                <button type='Submit' class = "edit-div-button" onclick="SerializeTask(this.id); popup(); setTimeout(function () { window.location.reload(); }, 10)">Save</button>
             </form>
           </fieldset>
         </div>

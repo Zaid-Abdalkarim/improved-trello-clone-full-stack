@@ -1,19 +1,13 @@
 item_counter = 0 // make this so it first counts all of the draggable items
 list_counter = 0
-function counter(list_index)
+function counter()
 {
   const Lists = document.getElementsByClassName("example-dropzone");
   item_counter = 0
   if(Lists.children != undefined)
-    item_counter = item_counter + (Lists[list_index].children.length - 2);
+    item_counter = item_counter + (Lists[0].children.length - 2);
 
-  // for(i = 0; i < Lists.length; i++)
-  // {
-  //     Lists[i].id = list_counter;
-  //     list_counter = list_counter + 1;
-  //     item_counter = item_counter + (Lists[i].children.length - 2);
-  // }
-  // list_counter = list_counter + 1; // list counter will always be off by one
+  return item_counter
 }
 
 function onDragStart(event) {
@@ -37,10 +31,6 @@ function onDrop(event) {
       .clearData();
 }
 function addListItem(id) {
-    list_id = id.slice(6, id.length)
-    console.log(parseInt(list_id))
-    
-    counter(parseInt(list_id))
     const newDiv = document.createElement("div"); // create the new element 
 
     newDiv.classList.add("example-draggable")
@@ -53,20 +43,23 @@ function addListItem(id) {
     
     const input = document.createElement('input')
     input.name =  "text";
-    input.value = ''
+    input.value = 'new task'
     input.setAttribute("disabled", '')
     
     const btn = document.createElement("button");
-    btn.id = json.task[j]._id;
+    const item_count = counter()
+    btn.id = 'new-task' + item_count;
     btn.textContent = "Edit"
     btn.setAttribute("onclick", 'popup(this.id);')
-    newDiv.appendChild(btn)
     
     input.name = "lists" + ".tasks" + item_counter;
     newDiv.appendChild(input)
+    newDiv.appendChild(btn)
     item_counter = item_counter + 1;
     Button = document.getElementById(id);
     Button.parentNode.insertBefore(newDiv, Button.nextSibling)
+
+    post(item_count)
 }
 
 
@@ -81,4 +74,19 @@ function printData(data)
   console.log(data)
 }
 
+const new_task = {
+  "text": "new task"
+}
+
+async function post(id)
+{
+  const pushData = await fetch(("http://localhost:8080/lists/".concat(String(getListId()))), {method: 'POST', body: JSON.stringify(new_task),   headers: {"Content-type": "application/json; charset=UTF-8"}})
+
+  const input = document.getElementById(id).previousElementSibling
+}
+
+async function put(id, data)
+{
+  const putData = await fetch(("http://localhost:8080/lists/".concat(getListId()).concat("/").concat(String(id))), {method: 'PUT', body: JSON.stringify(data),   headers: {"Content-type": "application/json; charset=UTF-8"}})
+}
 //<button onclick="addListItem(this.id)" id='To-Do-Button2'>Add Child</button>
