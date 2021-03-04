@@ -33,6 +33,11 @@ function popup(id)
     }
 }
 
+function SaveListName(id)
+{
+    console.log(id)
+}
+
 async function update(id)
 {
   const pushData = await fetch(("http://localhost:8080/lists/".concat(String(getListId()))), {method: 'PUT', body: JSON.stringify(new_task),   headers: {"Content-type": "application/json; charset=UTF-8"}})
@@ -41,6 +46,6 @@ async function update(id)
 
 function getListId()
 {
-  list_id = document.getElementsByClassName("example-dropzone")[0].id
-  return list_id
+//   list_id = document.getElementsByClassName("example-dropzone")[0].id
+  returnJSON.parse( sessionStorage.getItem("id"))
 }

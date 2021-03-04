@@ -1,13 +1,10 @@
 getList()
 
-function GetListId()
-{
-    return "603bf8ec5c972b4c3c994206"
-}
 
 async function getList()
 {
-    const response  = await fetch('http://localhost:8080/lists/'.concat(GetListId()))
+    list_id = JSON.parse( sessionStorage.getItem("id"))
+    const response  = await fetch('http://localhost:8080/lists/'.concat(list_id))
     const data = await response.json();
     return getHTML(data)
 }
@@ -96,44 +93,4 @@ async function SerializeTask(id) {
 
     printData(newData)
     put(id, newData)
-
-    // var elements = document.querySelectorAll('form');
-    // var data = {};
-    // for (var i = 0; i < elements.length; i++) {
-    //     var el = elements[i];
-    //     var val = el.value;
-    //     if (!val) val = "";
-    //     var fullName = el.getAttribute("name");
-    //     if (!fullName) continue;
-    //     var fullNameParts = fullName.split('.');
-    //     console.log(fullNameParts)
-    //     var prefix = '';
-    //     var stack = data;
-    //     var extra = ''
-    //     for (var k = 0; k < fullNameParts.length - 1; k++) {
-    //         prefix = fullNameParts[k];            
-
-    //         if (!stack[prefix]) {
-    //             stack[prefix] = {};
-    //         }
-    //         stack = stack[prefix];
-    //     }
-    //     prefix = fullNameParts[fullNameParts.length - 1];
-    //     if (stack[prefix]) {
-
-    //         var newVal = stack[prefix] + ',' + val;
-    //         stack[prefix] += newVal;
-    //     } else {
-    //         stack[prefix] = val;
-    //     }
-    // }
-    // printData(data)
-    // sendData(data)
 }
-
-// async function sendData(data)
-// {
-//     // console.log(await JSON.stringify(document.getElementById('main').formToJson()))
-//     console.log(data)
-//     await fetch("http://localhost:8080/list", {method: 'POST', body: JSON.stringify(data),   headers: {"Content-type": "application/json; charset=UTF-8"}})
-// }

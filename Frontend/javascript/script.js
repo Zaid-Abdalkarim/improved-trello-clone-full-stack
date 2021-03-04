@@ -70,8 +70,8 @@ function addListItem(id) {
 
 function getListId()
 {
-  list_id = document.getElementsByClassName("example-dropzone")[0].id
-  return list_id
+  // list_id = document.getElementsByClassName("example-dropzone")[0].id
+  return JSON.parse( sessionStorage.getItem("id"))
 }
 
 function printData(data)

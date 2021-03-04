@@ -40,12 +40,13 @@ router.get('/lists/:id', async(req, res) => {
 // working create one list
 router.post('/lists', async (req, res) => {
     try{
-        const List = await List.create({
+        const newList = await List.create({
             list_name : req.body.list_name
         })
-
-        await List.save()
-        return res.status(200).json(List)
+        
+        await newList.save()
+        console.log('were making a new list' + req.body.list_name)
+        return res.status(200).json(newList)
     } catch(error){
         return res.status(500).json({"error": error})
     }
